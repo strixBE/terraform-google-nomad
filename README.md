@@ -1,6 +1,6 @@
 # Nomad Cluster
 
-[![Nomad Version](https://img.shields.io/badge/Nomad%20Version-1.4.3-00bc7f.svg)](https://www.nomadproject.io/downloads) [![Consul Version](https://img.shields.io/badge/Consul%20Version-1.14.4-ca2171.svg)](https://www.consul.io/downloads)
+[![Nomad Version](https://img.shields.io/badge/Nomad%20Version-1.6.1-00bc7f.svg)](https://www.nomadproject.io/downloads) [![Consul Version](https://img.shields.io/badge/Consul%20Version-1.16.1-ca2171.svg)](https://www.consul.io/downloads)
 
 [Terraform](https://www.terraform.io/) Module for [Nomad](https://nomadproject.io/) clusters with [Consul](https://www.consul.io/) on [GCP](https://cloud.google.com/).
 
@@ -20,53 +20,10 @@ For a full interactive tutorial to get started using this module:
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fpicatz%2Fterraform-google-nomad&cloudshell_print=cloud-shell%2Fprint.txt&cloudshell_tutorial=cloud-shell%2Fsteps.md&shellonly=true)
 
-<details><summary>Manual Steps for Development</summary>
-<p>
-
-## Bootstrap a brand new GCP project using [`gcloud`](https://cloud.google.com/sdk/gcloud)
-
-Bootstrap a new GCP using the `setup_gcp.sh` shell script:
-
-```console
-$ bash setup_gcp.sh $YOUR_PROJECT_NAME
-...
-```
-
-It will automatically create, link the billing account, and enable the compute API in GCP.
-
-### Set Environment Variables
-
-Using your GCP project name and new created `account.json` Terraform service account file from the previous step:
-
-```console
-$ export GOOGLE_APPLICATION_CREDENTIALS=$(realpath account.json)
-$ export GOOGLE_PROJECT="$YOUR_PROJECT_NAME"
-```
-
-## Build the Bastion/Server/Client Images with Packer
-
-```console
-$ cd packer
-$ packer build template.json
-...
-```
-
-## Build Infrastructure
-
-```console
-$ terraform plan -var="project=$GOOGLE_PROJECT" -var="credentials=$GOOGLE_APPLICATION_CREDENTIALS"
-...
-$ terraform apply -var="project=$GOOGLE_PROJECT" -var="credentials=$GOOGLE_APPLICATION_CREDENTIALS"
-...
-```
-
-</p>
-</details>
-
 ## Infrastructure Diagram
 
 <p align="center">
-    <img alt="Infrastructure Diagram" src="https://raw.githubusercontent.com/picatz/terraform-google-nomad/master/diagram.png" height="700"/>
+    <img alt="Infrastructure Diagram" src="./diagrams/readme.svg" height="900"/>
 </p>
 
 ## Logs
@@ -96,9 +53,9 @@ AccessorID:       15b9a51d-7af4-e8d4-7c09-312c594a5907
 SecretID:         2a1c7926-b6e3-566e-ddf5-b19279fa134e
 Description:
 Local:            false
-Create Time:      2021-04-11 16:16:03.90231.4.3 +0000 UTC
+Create Time:      2021-04-11 16:16:03.90231.6.1 +0000 UTC
 Roles:
-   6ae941.4.3c07-49a7-fa95-8ce14aa8a75e - metrics
+   6ae941.6.1c07-49a7-fa95-8ce14aa8a75e - metrics
 
 $ consul_acl_token=2a1c7926-b6e3-566e-ddf5-b19279fa134e make nomad/metrics
 $ make nomad/logs
@@ -121,7 +78,7 @@ We can bootstrap ACLs to get the bootstrap management token like so:
 
 ```console
 $ nomad acl bootstrap
-Accessor ID  = a1495889-37ce-6784-78f3-31.4.3984bca
+Accessor ID  = a1495889-37ce-6784-78f3-31.6.1984bca
 Secret ID    = dc8c0349-c1fd-dc2c-299c-d513e5dd6df2
 Name         = Bootstrap Token
 Type         = management
@@ -147,19 +104,19 @@ When using the SSH bastion, you can use the `ssh-mtls-terminating-proxy.go` help
 
 ```console
 $ make ssh/proxy/mtls
-2021/04/11.14.48:28 getting terraform output
-2021/04/11.14.48:29 Bastion IP: "34.73.106.60"
-2021/04/11.14.48:29 Server IP: "1.4.368.2.8"
-2021/04/11.14.48:29 Setting up SSH agent
-2021/04/11.14.48:29 connecting to the bastion
-2021/04/11.14.48:29 connecting to the server through the bastion
-2021/04/11.14.48:30 wrapping the server connection with SSH through the bastion
-2021/04/11.14.48:30 tunneling a new connection for Consul to the server with SSH through the bastion
-2021/04/11.14.48:30 loading Consul TLS data
-2021/04/11.14.48:30 tunneling a new connection for somad to the server with ssh through the bastion
-2021/04/11.14.48:30 loading Nomad TLS data
-2021/04/11.14.48:30 starting Consul local listener on localhost:8500
-2021/04/11.14.48:30 starting Nomad local listener on localhost:4646
+2021/04/11.16.18:28 getting terraform output
+2021/04/11.16.18:29 Bastion IP: "34.73.106.60"
+2021/04/11.16.18:29 Server IP: "1.6.168.2.8"
+2021/04/11.16.18:29 Setting up SSH agent
+2021/04/11.16.18:29 connecting to the bastion
+2021/04/11.16.18:29 connecting to the server through the bastion
+2021/04/11.16.18:30 wrapping the server connection with SSH through the bastion
+2021/04/11.16.18:30 tunneling a new connection for Consul to the server with SSH through the bastion
+2021/04/11.16.18:30 loading Consul TLS data
+2021/04/11.16.18:30 tunneling a new connection for somad to the server with ssh through the bastion
+2021/04/11.16.18:30 loading Nomad TLS data
+2021/04/11.16.18:30 starting Consul local listener on localhost:8500
+2021/04/11.16.18:30 starting Nomad local listener on localhost:4646
 ...
 ```
 
